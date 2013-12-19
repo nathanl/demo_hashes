@@ -1,5 +1,6 @@
 require_relative 'spec_helper'
 require_relative '../lib/tuple_map'
+require_relative '../lib/hash_map'
 
 shared_examples_for "basic hash features" do
 
@@ -82,3 +83,6 @@ describe TupleMap do
   it_has "basic hash features"
 end
 
+describe HashMap do
+  it_has "basic hash features"
+end
