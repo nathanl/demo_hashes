@@ -15,6 +15,50 @@ shared_examples_for "basic hash features" do
       expect(hash[key]).to eq(val)
     end
 
+    it "can use a symbol key" do
+      key       = :snakebeard
+      hash[key] = 'radical'
+      expect(hash[key]).to eq('radical')
+    end
+
+    it "differentiates string and symbol keys" do
+      string = 'scuffle'
+      symbol = :scuffle
+      hash[string]  = 'gumption'
+      hash[symbol]  = 'hollar'
+      expect(hash[string]).to  eq('gumption')
+      expect(hash[symbol]).to  eq('hollar')
+    end
+
+    describe "array keys" do
+
+      it "can use an array key" do
+        arrrrr         = [1, 2]
+        hash[arrrrr] = "matey"
+        expect(hash[arrrrr]).to eq("matey")
+      end
+
+    end
+
+    describe "generic object keys" do
+
+      it "can use an Object key" do
+        obj = Object.new
+        hash[obj] = 'hoser'
+        expect(hash[obj]).to eq('hoser')
+      end
+
+      it "distinguishes between Object keys" do
+        obj  = Object.new
+        obj2 = Object.new
+        hash[obj]  = 'hoser'
+        hash[obj2] = 'eh?'
+        expect(hash[obj]).to eq('hoser')
+        expect(hash[obj2]).to eq('eh?')
+      end
+
+    end
+
   end
 
   describe "overwriting" do

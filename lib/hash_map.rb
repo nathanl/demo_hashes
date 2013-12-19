@@ -59,7 +59,7 @@ class HashMap
   private
 
   def digest_of(key)
-    raw_digest = key.unpack('U*').join('').to_i
+    raw_digest = key.object_id
     raw_digest % max_size
   end
 
