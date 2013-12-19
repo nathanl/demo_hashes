@@ -1,6 +1,7 @@
 require_relative 'spec_helper'
 require_relative '../lib/tuple_map'
 require_relative '../lib/hash_map'
+require_relative '../lib/critter'
 
 shared_examples_for "basic hash features" do
 
@@ -67,6 +68,24 @@ shared_examples_for "basic hash features" do
         hash[obj2] = 'eh?'
         expect(hash[obj]).to eq('hoser')
         expect(hash[obj2]).to eq('eh?')
+      end
+
+    end
+
+    describe "objects with custom hash methods" do
+
+      it "considers objects with the same hash to be the same key" do
+        opossum1 = Critter.new('Didelphidae', 'Didelphis', 'Virginiana')
+        opossum2 = Critter.new('Didelphidae', 'Didelphis', 'Aurita')
+        hash[opossum1] = 'tricky'
+        expect(hash[opossum2]).to eq('tricky')
+      end
+
+      it "considers objects with the different hashes to be different keys" do
+        opossum1 = Critter.new('Didelphidae', 'Didelphis', 'Virginiana')
+        opossum2 = Critter.new('Didelphidae', 'Gracilinanus', 'Agilis')
+        hash[opossum1] = 'sticky'
+        expect(hash[opossum2]).to eq(nil)
       end
 
     end
