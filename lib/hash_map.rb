@@ -59,7 +59,8 @@ class HashMap
   private
 
   def digest_of(key)
-    raw_digest = key.object_id
+    # The magic sauce
+    raw_digest = key.hash
     raw_digest % max_size
   end
 
