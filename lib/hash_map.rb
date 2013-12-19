@@ -1,3 +1,4 @@
+require 'prime'
 require_relative 'tuple_map'
 class HashMap
 
@@ -5,7 +6,8 @@ class HashMap
 
   def initialize
     self.keys           = []
-    self.max_size       = 200
+    self.max_size       = 199
+    self.max_collisions = 10
   end
 
   def []=(key, value)
@@ -23,7 +25,9 @@ class HashMap
     when nil
       internal_vals[digest] = TupleMap.new.tap { |h| h[key] = value }
     when TupleMap
-      existing_value[key] = value
+      (existing_value[key] = value).tap { |val|
+        redistribute if existing_value.keys.length > max_collisions
+      }
     end
   end
 
@@ -54,7 +58,7 @@ class HashMap
 
   protected
 
-  attr_accessor :max_size, :internal_vals
+  attr_accessor :max_size, :max_collisions, :internal_vals
 
   private
 
@@ -62,6 +66,30 @@ class HashMap
     # The magic sauce
     raw_digest = key.hash
     raw_digest % max_size
+  end
+
+  # When we get too many collisions, we'll have to grow the hash. Double the
+  # size and find the next prime number, to reduce the chances of having the
+  # same hash collisions.
+  def next_size
+    primes.detect { |p| p > (max_size * 2) }
+  end
+
+  def primes
+    @primes ||= Prime.each
+  end
+
+  def redistribute
+    new_size       = next_size
+    puts "whoops, time to redistribute! Bumping from #{max_size} to #{new_size}"
+    other          = self.class.new
+    other.max_size = new_size
+    keys.each do |key|
+      other[key]         = self[key]
+    end
+    self.internal_vals = other.internal_vals
+    self.max_size      = new_size
+    self
   end
 
 end
