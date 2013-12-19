@@ -15,6 +15,11 @@ shared_examples_for "basic hash features" do
       expect(hash[key]).to eq(val)
     end
 
+    it "treats equivilent strings as the same key" do
+      hash['woo'] = 'ha'
+      expect(hash['woo']).to eq('ha')
+    end
+
     it "can use a symbol key" do
       key       = :snakebeard
       hash[key] = 'radical'
@@ -36,6 +41,13 @@ shared_examples_for "basic hash features" do
         arrrrr         = [1, 2]
         hash[arrrrr] = "matey"
         expect(hash[arrrrr]).to eq("matey")
+      end
+
+      it "treats equivilent arrays as the same key" do
+        arr1 = [1, 2]
+        arr2 = [1, 2]
+        hash[[arr1]] = 'uno, dos'
+        expect(hash[[arr2]]).to eq('uno, dos')
       end
 
     end
