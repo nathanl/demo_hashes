@@ -8,11 +8,10 @@ class HashMap
     self.keys           = []
     self.max_size       = 199
     self.max_collisions = 10
+    self.internal_vals ||= Array.new(max_size)
   end
 
   def []=(key, value)
-    self.internal_vals ||= Array.new(max_size)
-    # Note: keys is more properly a Set, but it seems to have O(N) insertion time
     self.keys << key unless has_key?(key)
 
     digest = digest_of(key)
