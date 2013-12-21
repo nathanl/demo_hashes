@@ -34,6 +34,10 @@ class TupleMap
     keys.include?(key)
   end
 
+  def length
+    data.length
+  end
+
   protected
   attr_accessor :data
 

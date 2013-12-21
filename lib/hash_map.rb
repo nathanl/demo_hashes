@@ -26,7 +26,7 @@ class HashMap
       internal_vals[digest] = TupleMap.new.tap { |h| h[key] = value }
     when TupleMap
       (existing_value[key] = value).tap { |val|
-        redistribute if existing_value.keys.length > max_collisions
+        redistribute if existing_value.length > max_collisions
       }
     end
   end
@@ -54,6 +54,10 @@ class HashMap
     # inside a TupleMap
     return false if internal_vals[value_index].nil?
     internal_vals[value_index].keys.include?(key)
+  end
+
+  def length
+    keys.length
   end
 
   protected
